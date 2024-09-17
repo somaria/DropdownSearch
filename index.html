@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Custom Dropdown with Search</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        .custom-select-wrapper {
+            position: relative;
+            display: inline-block;
+            width: 200px;
+        }
+
+        .custom-select {
+            background-color: #f1f1f1;
+            border: 1px solid #ddd;
+            padding: 10px;
+            cursor: pointer;
+        }
+
+        .custom-select-items {
+            display: none;
+            position: absolute;
+            background-color: #f1f1f1;
+            border: 1px solid #ddd;
+            max-height: 150px;
+            overflow-y: auto;
+            z-index: 99;
+            width: 100%;
+        }
+
+        .custom-select-items .search-box {
+            width: 100%;
+            padding: 10px;
+            box-sizing: border-box;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .custom-select-items div {
+            padding: 10px;
+            cursor: pointer;
+        }
+
+        .custom-select-items div:hover {
+            background-color: #ddd;
+        }
+
+        .custom-select-selected {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>Select your favorite fruit:</h2>
+
+    <div class="custom-select-wrapper">
+        <div class="custom-select" id="customSelect">
+            <span class="custom-select-selected">Select a fruit</span>
+        </div>
+        <div class="custom-select-items" id="fruitList">
+            <input type="text" class="search-box" id="searchInput" placeholder="Search...">
+            <div data-value="Apple">Apple</div>
+            <div data-value="Banana">Banana</div>
+            <div data-value="Cherry">Cherry</div>
+            <div data-value="Orange">Orange</div>
+        </div>
+    </div>
+
+    <p id="selectedFruit"></p>
+
+    <script>
+        $(document).ready(function() {
+            // Toggle dropdown visibility
+            $('#customSelect').on('click', function() {
+                $('#fruitList').toggle();
+            });
+
+            // Filter function for search box
+            $('#searchInput').on('keyup', function() {
+                var searchTerm = $(this).val().toLowerCase();
+                $('#fruitList div').filter(function() {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(searchTerm) > -1);
+                });
+            });
+
+            // Select an option
+            $('#fruitList div').on('click', function() {
+                var selectedFruit = $(this).data('value');
+                $('.custom-select-selected').text(selectedFruit);
+                $('#selectedFruit').text('You selected: ' + selectedFruit);
+                $('#fruitList').hide();  // Hide dropdown after selection
+            });
+
+            // Close the dropdown if clicking outside of it
+            $(document).click(function(event) {
+                if (!$(event.target).closest('.custom-select-wrapper').length) {
+                    $('#fruitList').hide();
+                }
+            });
+        });
+    </script>
+
+</body>
+</html>
