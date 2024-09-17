@@ -40,10 +40,16 @@
         .custom-select-items div {
             padding: 10px;
             cursor: pointer;
+            display: flex;
+            align-items: center;
         }
 
         .custom-select-items div:hover {
             background-color: #ddd;
+        }
+
+        .custom-select-items input[type="checkbox"] {
+            margin-right: 10px;
         }
 
         .custom-select-selected {
@@ -53,22 +59,30 @@
 </head>
 <body>
 
-    <h2>Select your favorite fruit:</h2>
+    <h2>Select your favorite fruits:</h2>
 
     <div class="custom-select-wrapper">
         <div class="custom-select" id="customSelect">
-            <span class="custom-select-selected">Select a fruit</span>
+            <span class="custom-select-selected">Select fruits</span>
         </div>
         <div class="custom-select-items" id="fruitList">
             <input type="text" class="search-box" id="searchInput" placeholder="Search...">
-            <div data-value="Apple">Apple</div>
-            <div data-value="Banana">Banana</div>
-            <div data-value="Cherry">Cherry</div>
-            <div data-value="Orange">Orange</div>
+            <div data-value="Apple">
+                <input type="checkbox" class="fruit-checkbox" value="Apple"> Apple
+            </div>
+            <div data-value="Banana">
+                <input type="checkbox" class="fruit-checkbox" value="Banana"> Banana
+            </div>
+            <div data-value="Cherry">
+                <input type="checkbox" class="fruit-checkbox" value="Cherry"> Cherry
+            </div>
+            <div data-value="Orange">
+                <input type="checkbox" class="fruit-checkbox" value="Orange"> Orange
+            </div>
         </div>
     </div>
 
-    <p id="selectedFruit"></p>
+    <p id="selectedFruits"></p>
 
     <script>
         $(document).ready(function() {
@@ -85,12 +99,14 @@
                 });
             });
 
-            // Select an option
-            $('#fruitList div').on('click', function() {
-                var selectedFruit = $(this).data('value');
-                $('.custom-select-selected').text(selectedFruit);
-                $('#selectedFruit').text('You selected: ' + selectedFruit);
-                $('#fruitList').hide();  // Hide dropdown after selection
+            // Handle checkbox selection
+            $('.fruit-checkbox').on('change', function() {
+                var selectedFruits = [];
+                $('.fruit-checkbox:checked').each(function() {
+                    selectedFruits.push($(this).val());
+                });
+                $('.custom-select-selected').text(selectedFruits.join(', ') || 'Select fruits');
+                $('#selectedFruits').text('You selected: ' + (selectedFruits.length ? selectedFruits.join(', ') : 'None'));
             });
 
             // Close the dropdown if clicking outside of it
